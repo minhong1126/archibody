@@ -13,9 +13,10 @@ const UpButton = () => {
   return (
     <button
       onClick={scrollToTop}
-      className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#E4E4E4] text-white transition hover:scale-110"
+      className="fixed z-50 flex lg:h-15.5 lg:w-15.5 items-center justify-center rounded-full bg-[#E4E4E4] text-white transition hover:scale-110
+          lg:bottom-6.5 lg:right-6.5"
     >
-      <IoIosArrowRoundUp size={20} />
+      <IoIosArrowRoundUp size={24} className="lg:h-24 lg:2-24" />
     </button>
   );
 };
