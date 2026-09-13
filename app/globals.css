@@ -1,12 +1,16 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-pretendard: "Pretendard", sans-serif;
+  --font-pretendard: 'Pretendard', sans-serif;
 
+  /* header */
   --color-header-text: #878787;
-}
 
-body {
-  @apply font-pretendard;
-}
+  /* footer */
+  --color-font-footer-description: #949494;
 
+  /* 첫 페이지 */
+  --color-font-main: #414141;
+  --color-font-desc-light: #9e9e9e;
+  --color-font-desc-dark: #787878;
+}

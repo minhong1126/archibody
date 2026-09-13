@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
 import { MenuItem } from '@/type/common/headerType';
@@ -15,12 +15,13 @@ type MobileHeaderProps = {
 
 const MobileHeader = ({ menuItems, isHeaderVisible }: MobileHeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   // portal은 클라이언트에서만 document.body에 접근 가능
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   // 헤더가 스크롤로 숨겨지면 열려있던 메뉴도 자동으로 닫기
   useEffect(() => {
@@ -54,7 +55,7 @@ const MobileHeader = ({ menuItems, isHeaderVisible }: MobileHeaderProps) => {
           type="button"
           aria-label="메뉴 열기"
           onClick={() => setIsMenuOpen(true)}
-          className="absolute top-1/2 right-[27px] -translate-y-1/2"
+          className="absolute top-1/2 right-6.75 -translate-y-1/2"
         >
           <HiBars3 className="size-5 text-neutral-400" />
         </button>
@@ -82,19 +83,19 @@ const MobileHeader = ({ menuItems, isHeaderVisible }: MobileHeaderProps) => {
                 type="button"
                 aria-label="뒤로가기"
                 onClick={() => setIsMenuOpen(false)}
-                className="absolute top-1/2 left-[33px] -translate-y-1/2"
+                className="absolute top-1/2 left-6.75 -translate-y-1/2"
               >
                 <HiChevronLeft className="size-5" height={15} width={9} />
               </button>
             </div>
 
-            <nav className="flex flex-col items-start justify-start gap-5 px-[33px] pt-[45px]">
+            <nav className="flex flex-col items-start justify-start gap-5 px-[33px] pt-[45px] text-[clamp(14px,3.5vw,24px)]">
               {menuItems.map((item) => (
                 <Link
                   key={item.label}
                   href={item.href}
                   onClick={() => setIsMenuOpen(false)}
-                  className="self-stretch text-left text-sm font-medium"
+                  className="self-stretch text-left text-sm"
                 >
                   {item.label}
                 </Link>

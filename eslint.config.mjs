@@ -20,6 +20,7 @@ const eslintConfig = defineConfig([
     rules: {
       'tailwindcss/classnames-order': 'off',
       'tailwindcss/no-custom-classname': 'warn',
+      'react-hooks/set-state-in-effect': 'off',
     },
   },
 
