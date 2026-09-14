@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="ko">
       <body className="font-pretendard min-h-screen w-full bg-white">
         <Header />
-        <main className="min-h-0 flex-1 scroll-smooth lg:h-screen lg:snap-y lg:snap-mandatory lg:overflow-hidden lg:overflow-y-scroll">
+        <main className="min-h-0 w-full flex-1 overscroll-y-contain scroll-smooth [-webkit-overflow-scrolling:touch] lg:h-screen lg:snap-y lg:snap-mandatory lg:overflow-hidden lg:overflow-y-scroll">
           {children}
         </main>
       </body>

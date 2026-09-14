@@ -1,6 +1,6 @@
 const FirstSection = () => {
   return (
-    <section className="flex aspect-390/218 flex-col items-center justify-center gap-5 lg:size-full lg:gap-6">
+    <section className="flex aspect-390/218 h-[calc(100%-112px)] flex-col items-center justify-center gap-5 lg:size-full lg:gap-6">
       <h1 className="text-font-main text-center text-[clamp(21px,4vw,40px)] font-semibold lg:text-[50px]">
         내 몸에 맞는 집
       </h1>

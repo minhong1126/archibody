@@ -41,7 +41,7 @@ const MobileHeader = ({ menuItems, isHeaderVisible }: MobileHeaderProps) => {
   return (
     <>
       <div
-        className={`relative flex h-28 w-full items-center justify-center overflow-hidden bg-white ${isMenuOpen && 'hidden'}`}
+        className={`relative flex h-20 w-full items-center justify-center overflow-hidden bg-white ${isMenuOpen && 'hidden'}`}
       >
         <Link
           href="/"

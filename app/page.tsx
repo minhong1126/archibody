@@ -7,7 +7,7 @@ import UpButton from '@/common/UpButton';
 const Page = () => {
   return (
     <>
-      <div className="lg:h-screen lg:snap-start">
+      <div className="pt-20 lg:h-screen lg:snap-start">
         <FirstSection />
       </div>
       <div className="lg:h-screen lg:snap-start">
