@@ -3,13 +3,15 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { createPortal } from 'react-dom';
-import { MenuItem } from '@/type/common/headerType';
 import Image from 'next/image';
 import { HiChevronLeft, HiBars3 } from 'react-icons/hi2';
 import logo from '@/public/common/main-logo.png';
 
 type MobileHeaderProps = {
-  menuItems: MenuItem[];
+  menuItems: {
+    label: string;
+    href: string;
+  }[];
   isHeaderVisible: boolean;
 };
 
