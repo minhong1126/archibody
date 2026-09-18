@@ -8,7 +8,7 @@ const SecondSection = () => {
         <Image src={aboutImage} alt="about" className="h-auto w-full" />
       </div>
 
-      <p className="max-w-[clamp(18rem,60vw,56.25rem)] text-center text-[clamp(10px,1.5vw,24px)] leading-[clamp(1rem,2.5vw,2.5rem)] font-normal break-keep text-[#707070]">
+      <p className="max-w-[clamp(18rem,60vw,56.25rem)] text-center text-[clamp(0.75rem,1.4vw,1.25rem)] leading-[clamp(1.125rem,2vw,1.875rem)] font-normal break-keep text-[#707070]">
         <span className="font-semibold">집 짓기</span>는 터를 고르고 알맞은
         크기와 형태의 집을
         <br className="lg:hidden" /> 알맞은 자리에 놓고 필요한 것들로 채워
