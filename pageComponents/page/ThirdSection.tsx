@@ -31,7 +31,7 @@ const ProgramBlock = ({
   return (
     <div
       className={[
-        'pre-wrap flex w-full flex-col rounded-[14px] bg-[#f1f1f1] px-5.75 py-5.5 min-[1400px]:justify-center min-[1400px]:rounded-[40px]',
+        'flex w-full flex-col rounded-[14px] bg-[#f1f1f1] px-5.75 py-5.5 break-keep min-[1400px]:justify-center min-[1400px]:rounded-[40px]',
         'min-[1400px]:bg-linear-to-b min-[1400px]:from-[#666666]/20 min-[1400px]:to-white/20 min-[1400px]:px-14 min-[1400px]:py-20 min-[1400px]:shadow-[0px_-2px_45.5px_rgba(0,0,0,0.05),inset_-7px_1px_19px_rgba(255,255,255,1)]',
       ].join(' ')}
     >
@@ -53,7 +53,7 @@ const ProgramBlock = ({
 const ThirdSection = () => {
   return (
     <section className="flex flex-col items-center justify-center px-[5%] py-10 min-[1400px]:size-full min-[1400px]:py-54">
-      <h2 className="mb-8 text-[clamp(17px,3.5vw,35px)] font-semibold text-[#2D2D2D] min-[1400px]:mb-12 min-[1400px]:text-[40px]">
+      <h2 className="text-font-title mb-8 text-[clamp(17px,3.5vw,35px)] font-semibold min-[1400px]:mb-12 min-[1400px]:text-[40px]">
         건축주 참여 프로그램
       </h2>
 

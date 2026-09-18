@@ -34,7 +34,7 @@ const MainFooter = () => {
   return (
     <footer className="relative mt-13.5 px-9 py-10 lg:h-60 lg:px-20 lg:py-0">
       <div className="flex flex-col gap-6 lg:absolute lg:inset-x-20 lg:top-2/3 lg:-translate-y-1/2 lg:flex-row lg:justify-between lg:gap-0">
-        <div className="text-font-desc-light flex flex-col gap-2.5 text-[clamp(12px,2vw,18px)] whitespace-nowrap lg:w-2/3 lg:flex-row lg:justify-between">
+        <div className="text-font-desc-light flex flex-col gap-2.5 text-[clamp(12px,2vw,16px)] whitespace-nowrap lg:w-2/3 lg:flex-row lg:justify-between">
           <dl className="order-2 flex flex-col gap-2.5 lg:order-1 lg:gap-0">
             <dt className="hidden text-[#686868] lg:mb-1 lg:block">주소</dt>
             {ADDRESSES.map(({ label, value }) => (
@@ -63,7 +63,7 @@ const MainFooter = () => {
           </dl>
 
           <dl className="order-3 lg:mt-auto lg:self-end">
-            <dt className="text-[clamp(10px,2vw,18px)] text-[#686868]">
+            <dt className="text-[clamp(10px,2vw,16px)] text-[#686868]">
               © 2026. 건축사사무소 몸. All rights reserved.
             </dt>
           </dl>
