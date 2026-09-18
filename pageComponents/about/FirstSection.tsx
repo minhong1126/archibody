@@ -40,19 +40,19 @@ const FirstSection = () => {
         </div>
       </div>
 
-      <p className="max-w-[clamp(18rem,60vw,56.25rem)] text-center text-[clamp(0.75rem,1.4vw,1.25rem)] leading-[clamp(1.125rem,2vw,1.875rem)] font-normal text-[#707070]">
+      <div className="max-w-[clamp(18rem,60vw,56.25rem)] text-center text-[clamp(0.75rem,1.4vw,1.25rem)] leading-[clamp(1.125rem,2vw,1.875rem)] font-normal text-[#707070] break-keep">
         <span className="font-semibold">몸</span>은
         <span className="font-semibold"> 건강한 삶</span>을 위한 바탕으로서
-        <span className="font-semibold">건강한 집</span>을 의미합니다.
+        <span className="font-semibold"> 건강한 집</span>을 의미합니다.
         <br />
         그래서 <span className="font-semibold">건축사사무소 몸</span>이 생각하는
-        <span className="font-semibold">좋은 집</span>은
+        <span className="font-semibold"> 좋은 집</span>은
         <br className="lg:hidden" /> 따뜻하고 건강하고 아름다운 집,
         <br />
         <br className="lg:hidden" />
         <span className="font-semibold text-neutral-700">내 몸에 맞는 집</span>
         입니다.
-      </p>
+      </div>
     </section>
   );
 };
