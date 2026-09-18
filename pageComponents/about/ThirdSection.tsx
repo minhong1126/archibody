@@ -5,38 +5,28 @@ type CareerItem = {
   year: string;
   role: string;
   dot: string;
-  titleColor: string;
-  descColor: string;
 };
 
 const careerItems: CareerItem[] = [
   {
     year: '2020 ~',
     role: '건축사사무소 몸 대표',
-    dot: 'bg-stone-500',
-    titleColor: 'text-neutral-600',
-    descColor: 'text-neutral-700',
+    dot: 'bg-[#666666]',
   },
   {
     year: '2015 - 2019',
     role: '건축디자인그룹 몸 대표',
-    dot: 'bg-neutral-400',
-    titleColor: 'text-neutral-500',
-    descColor: 'text-neutral-500',
+    dot: 'bg-[#9D9D9D]',
   },
   {
     year: '2013 - 2014',
     role: '살둔제로에너지하우스 협력 설계',
-    dot: 'bg-stone-300',
-    titleColor: 'text-neutral-500',
-    descColor: 'text-neutral-500',
+    dot: 'bg-[#CFCFCF]',
   },
   {
     year: '2008 - 2012',
     role: '정림건축종합건축사사무소 근무',
-    dot: 'bg-neutral-200',
-    titleColor: 'text-neutral-500',
-    descColor: 'text-neutral-500',
+    dot: 'bg-[#E0E0E0]',
   },
 ];
 
@@ -52,12 +42,13 @@ const ThirdSection = () => {
         </span>
       </div>
 
-      <div className="flex w-full gap-[clamp(1.5rem,4vw,2.5rem)] lg:justify-center">
-        <div className="hidden shrink-0 self-stretch lg:flex">
+      <div className="flex w-full items-center gap-[clamp(1.5rem,4vw,2.5rem)] lg:justify-center">
+        <div className="hidden shrink-0 lg:block">
           <Image
             src={aboutOwner}
             alt="건축사 임보라"
-            className="h-full w-auto object-contain"
+            className="block h-auto max-h-100 w-[clamp(200px,20vw,350px)] object-cover"
+            priority
           />
         </div>
 
@@ -77,16 +68,21 @@ const ThirdSection = () => {
                   index === careerItems.length - 1 ? 'pb-0' : ''
                 }`}
               >
-                <span
-                  className={`text-[clamp(0.75rem,1.4vw,1.25rem)] leading-[clamp(1.125rem,2vw,1.875rem)] font-semibold ${item.titleColor}`}
+                <p
+                  className={`text-[clamp(0.75rem,1.4vw,1.25rem)] leading-[clamp(1.125rem,2vw,1.875rem)] font-semibold ${
+                    index === 0 ? 'text-[#525252]' : 'text-[#6E6E6E]'
+                  }`}
                 >
                   {item.year}
-                </span>
-                <div
-                  className={`text-[clamp(0.75rem,1.4vw,1.25rem)] font-medium ${item.descColor}`}
+                </p>
+
+                <p
+                  className={`text-[clamp(0.75rem,1.4vw,1.25rem)] font-medium ${
+                    index === 0 ? 'text-[#3F3F3F]' : 'text-[#6C6C6C]'
+                  }`}
                 >
                   {item.role}
-                </div>
+                </p>
               </div>
             </div>
           ))}

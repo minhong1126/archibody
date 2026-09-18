@@ -1,4 +1,3 @@
-import React from 'react';
 import Footer from '@/common/Footer';
 import UpButton from '@/common/UpButton';
 import FirstSection from '@/pageComponents/about/FirstSection';
@@ -8,13 +7,13 @@ import ThirdSection from '@/pageComponents/about/ThirdSection';
 const Page = () => {
   return (
     <>
-      <div className="pt-20 lg:h-screen lg:snap-start lg:pt-0">
+      <div className="mb-20 pt-20 lg:mb-0 lg:h-screen lg:snap-start lg:pt-0">
         <FirstSection />
       </div>
-      <div className="lg:h-screen lg:snap-start">
+      <div className="mb-20 lg:mb-0 lg:h-screen lg:snap-start">
         <SecondSection />
       </div>
-      <div className="lg:h-screen lg:snap-start lg:pt-10">
+      <div className="mb-20 lg:mb-0 lg:h-screen lg:snap-start">
         <ThirdSection />
       </div>
       <div className="lg:snap-start">
