@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import logo from '@/public/common/main-logo.png';
-import type { MenuItem } from '@/type/common/headerType';
 
 type DesktopHeaderProps = {
-  menuItems: MenuItem[];
+  menuItems: {
+    label: string;
+    href: string;
+  }[];
 };
 
 const desktopMenuGap: number[] = [83, 64, 83, 0];
