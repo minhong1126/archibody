@@ -3,16 +3,15 @@
 @theme {
   --font-pretendard: 'Pretendard', sans-serif;
 
+  /* 섹션 간 간격 */
+  --spacing-between-sections: clamp(3.5rem, 16vw, 10rem);
+
   /* header */
   --color-header-text: #878787;
 
   /* footer */
   --color-font-footer-description: #949494;
 
-  /* 첫 페이지 */
-  --color-font-main: #414141;
-  --color-font-desc-light: #9e9e9e;
-  --color-font-desc-dark: #787878;
-
-  --color-font-title: #2d2d2d;
+  /* 섹션 제목 */
+  --color-font-title: #414141;
 }

@@ -13,7 +13,7 @@ const desktopMenuGap: number[] = [83, 64, 83, 0];
 
 const DesktopHeader = ({ menuItems }: DesktopHeaderProps) => {
   return (
-    <div className="relative flex h-24 w-full items-center justify-center px-[150px]">
+    <div className="relative flex h-24 w-full items-center justify-center px-37.5">
       <Link href="/" aria-label="홈으로 이동">
         <Image width={48} height={48} src={logo} alt="logo" />
       </Link>

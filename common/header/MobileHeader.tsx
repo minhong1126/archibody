@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import Link from 'next/link';
 import { createPortal } from 'react-dom';
+import { HiBars3, HiChevronLeft } from 'react-icons/hi2';
 import Image from 'next/image';
-import { HiChevronLeft, HiBars3 } from 'react-icons/hi2';
+import Link from 'next/link';
 import logo from '@/public/common/main-logo.png';
 
 type MobileHeaderProps = {
@@ -91,7 +91,7 @@ const MobileHeader = ({ menuItems, isHeaderVisible }: MobileHeaderProps) => {
               </button>
             </div>
 
-            <nav className="flex flex-col items-start justify-start gap-5 px-[33px] pt-[45px] text-[clamp(14px,3.5vw,24px)]">
+            <nav className="flex flex-col items-start justify-start gap-5 px-8.25 pt-11.25 text-[clamp(14px,3.5vw,24px)]">
               {menuItems.map((item) => (
                 <Link
                   key={item.label}

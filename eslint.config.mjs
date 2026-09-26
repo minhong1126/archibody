@@ -3,6 +3,7 @@ import nextVitals from 'eslint-config-next/core-web-vitals';
 import nextTs from 'eslint-config-next/typescript';
 import eslintPluginTailwindcss from 'eslint-plugin-tailwindcss';
 import prettierConfig from 'eslint-config-prettier';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -21,6 +22,20 @@ const eslintConfig = defineConfig([
       'tailwindcss/classnames-order': 'off',
       'tailwindcss/no-custom-classname': 'warn',
       'react-hooks/set-state-in-effect': 'off',
+    },
+  },
+  {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'simple-import-sort/imports': [
+        'error',
+        {
+          groups: [['^\\u0000', '^react', '^@?\\w', '^@/', '^\\.']],
+        },
+      ],
+      'simple-import-sort/exports': 'error',
     },
   },
 

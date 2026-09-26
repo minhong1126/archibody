@@ -33,7 +33,7 @@ const careerItems: CareerItem[] = [
 const ThirdSection = () => {
   return (
     <section className="flex w-full flex-col gap-[clamp(1.5rem,5vw,3rem)] pt-[clamp(2.5rem,6vw,5rem)] lg:px-[clamp(1.25rem,5vw,3rem)]">
-      <div className="text-font-main flex flex-col items-center gap-[clamp(0.25rem,1vw,0.5rem)]">
+      <div className="text-font-title flex flex-col items-center gap-[clamp(0.25rem,1vw,0.5rem)]">
         <span className="text-center text-[clamp(0.75rem,1.4vw,1.5rem)] font-semibold">
           대표
         </span>

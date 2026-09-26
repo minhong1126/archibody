@@ -7,14 +7,16 @@ import ThirdSection from '@/pageComponents/about/ThirdSection';
 const Page = () => {
   return (
     <>
-      <div className="mb-45 pt-20 lg:mb-0 lg:h-screen lg:snap-start lg:pt-0">
-        <FirstSection />
-      </div>
-      <div className="mb-45 lg:mb-0 lg:h-screen lg:snap-start">
-        <SecondSection />
-      </div>
-      <div className="mb-45 lg:mb-0 lg:h-screen lg:snap-start">
-        <ThirdSection />
+      <div className="gap-between-sections flex flex-col">
+        <div className="mb-45 pt-20 lg:mb-0 lg:h-screen lg:snap-start lg:pt-0">
+          <FirstSection />
+        </div>
+        <div className="mb-45 lg:mb-0 lg:h-screen lg:snap-start">
+          <SecondSection />
+        </div>
+        <div className="mb-45 lg:mb-0 lg:h-screen lg:snap-start">
+          <ThirdSection />
+        </div>
       </div>
       <div className="lg:snap-start">
         <Footer />

@@ -1,15 +1,9 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
 
-const images = [
-  '/home/home1.jpg',
-  '/home/home2.jpg',
-  '/home/home3.jpg',
-  '/home/home4.jpg',
-  '/home/home5.jpg',
-];
+const images = Array.from({ length: 5 }, (_, i) => `/home/home${i + 1}.jpg`);
 
 const SecondSection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,7 +17,7 @@ const SecondSection = () => {
   }, []);
 
   return (
-    <section className="mx-auto flex w-full flex-col items-center justify-center gap-6 px-6 py-16 lg:size-full lg:gap-10 lg:p-0 lg:px-[10%]">
+    <section className="flex size-full flex-col items-center justify-center gap-6 lg:size-full lg:gap-10 lg:px-[10%] lg:py-0">
       <div className="flex w-full flex-col items-center gap-6 lg:gap-10">
         <div className="aspect-390/214 w-full overflow-hidden lg:aspect-1238/624">
           <div
