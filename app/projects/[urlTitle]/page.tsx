@@ -1,5 +1,5 @@
-import Footer from '@/common/Footer';
-import ProjectDetail from '@/pageComponents/programs/ProjectsDetail';
+import Footer from '@/components/common/Footer';
+import ProjectDetail from '@/components/projects/ProjectsDetail';
 
 const ProjectDetailPage = () => {
   return (

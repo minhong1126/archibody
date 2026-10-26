@@ -1,9 +1,9 @@
-import MainFooter from '@/common/Footer';
-import ProjectsListSection from '@/pageComponents/programs/ProjectsListSection';
+import MainFooter from '@/components/common/Footer';
+import ProjectsListSection from '@/components/projects/ProjectsListSection';
 
 const Page = () => {
   return (
-    <div className="pt-20 lg:size-full lg:pt-24">
+    <div className="pt-20 lg:pt-24">
       <ProjectsListSection />
       <div className="lg:hidden">
         <MainFooter />

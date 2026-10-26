@@ -1,20 +1,20 @@
-import Footer from '@/common/Footer';
-import UpButton from '@/common/UpButton';
-import FirstSection from '@/pageComponents/about/FirstSection';
-import SecondSection from '@/pageComponents/about/SecondSection';
-import ThirdSection from '@/pageComponents/about/ThirdSection';
+import FirstSection from '@/components/about/FirstSection';
+import SecondSection from '@/components/about/SecondSection';
+import ThirdSection from '@/components/about/ThirdSection';
+import Footer from '@/components/common/Footer';
+import UpButton from '@/components/common/UpButton';
 
 const Page = () => {
   return (
     <>
       <div className="gap-between-sections flex flex-col">
-        <div className="mb-45 pt-20 lg:mb-0 lg:h-screen lg:snap-start lg:pt-0">
+        <div className="lg-section pt-20 lg:pt-0">
           <FirstSection />
         </div>
-        <div className="mb-45 lg:mb-0 lg:h-screen lg:snap-start">
+        <div className="lg-section">
           <SecondSection />
         </div>
-        <div className="mb-45 lg:mb-0 lg:h-screen lg:snap-start">
+        <div className="lg-section">
           <ThirdSection />
         </div>
       </div>

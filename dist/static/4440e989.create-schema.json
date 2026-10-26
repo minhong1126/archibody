@@ -1,0 +1,198 @@
+[
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "title",
+        "type": "string",
+        "title": "제목"
+      },
+      {
+        "options": {
+          "source": "title",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "description": "주소의 /project/ 이후에 들어가는 단어입니다. 한글은 피해주세요",
+        "name": "urlTitle",
+        "type": "slug",
+        "title": "페이지 이름"
+      },
+      {
+        "options": {
+          "list": [
+            {
+              "title": "경기",
+              "value": "경기"
+            },
+            {
+              "title": "강원",
+              "value": "강원"
+            },
+            {
+              "title": "충남/충북",
+              "value": "충남/충북"
+            },
+            {
+              "title": "전남/전북",
+              "value": "전남/전북"
+            },
+            {
+              "title": "기타",
+              "value": "기타"
+            }
+          ],
+          "layout": "dropdown"
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "경기",
+                  "강원",
+                  "충남/충북",
+                  "전남/전북",
+                  "기타"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "description": "목록 페이지 필터 탭에 사용됩니다",
+        "name": "region",
+        "type": "string",
+        "title": "지역"
+      },
+      {
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "description": "예: 원주시 산현리",
+        "name": "location",
+        "type": "string",
+        "title": "위치"
+      },
+      {
+        "options": {
+          "dateFormat": "YYYY.MM"
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "name": "completionDate",
+        "type": "date",
+        "title": "준공일"
+      },
+      {
+        "description": "예: 지상 2층",
+        "name": "scale",
+        "type": "string",
+        "title": "규모"
+      },
+      {
+        "description": "예: 2인 2묘",
+        "name": "occupants",
+        "type": "string",
+        "title": "거주인원"
+      },
+      {
+        "name": "siteArea",
+        "type": "number",
+        "title": "대지면적 (㎡)"
+      },
+      {
+        "name": "buildingArea",
+        "type": "number",
+        "title": "건축면적 (㎡)"
+      },
+      {
+        "name": "totalFloorArea",
+        "type": "number",
+        "title": "연면적 (㎡)"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "level": "error",
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ]
+          }
+        ],
+        "description": "목록 페이지 카드에 사용됩니다",
+        "name": "thumbnail",
+        "type": "image",
+        "title": "썸네일 이미지"
+      },
+      {
+        "description": "상세 페이지에 순서대로 노출됩니다",
+        "of": [
+          {
+            "options": {
+              "hotspot": true
+            },
+            "type": "image"
+          }
+        ],
+        "name": "gallery",
+        "type": "array",
+        "title": "갤러리 이미지"
+      }
+    ],
+    "name": "project",
+    "type": "document",
+    "title": "프로젝트"
+  }
+]

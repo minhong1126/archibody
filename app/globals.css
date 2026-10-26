@@ -8,10 +8,12 @@
 
   /* header */
   --color-header-text: #878787;
+}
 
-  /* footer */
-  --color-font-footer-description: #949494;
+@utility section-title {
+  @apply text-center text-[clamp(16px,2.5vw,40px)] font-semibold text-['#414141'];
+}
 
-  /* 섹션 제목 */
-  --color-font-title: #414141;
+@utility lg-section {
+  @apply h-screen snap-start;
 }
