@@ -16,10 +16,15 @@ export const projectSchema = defineType({
       name: 'urlTitle',
       title: '페이지 이름',
       description:
-        '주소의 /project/ 이후에 들어가는 단어입니다. 한글은 피해주세요',
+        '주소의 /projects/ 뒤에 들어가는 영문 이름입니다. (예: dajeonghan-jib)',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
-      validation: (Rule) => Rule.required(),
+      options: { maxLength: 96 }, // source를 빼면 Generate 버튼이 사라짐
+      validation: (Rule) =>
+        Rule.required().custom((slug) =>
+          !slug?.current || /^[a-z0-9]+(-[a-z0-9]+)*$/.test(slug.current)
+            ? true
+            : '영문 소문자, 숫자, 하이픈(-)만 사용할 수 있어요. (예: dajeonghan-jib)',
+        ),
     }),
     defineField({
       name: 'region',
@@ -48,12 +53,18 @@ export const projectSchema = defineType({
     defineField({
       name: 'completionDate',
       title: '준공일',
-      type: 'date',
-      options: {
-        dateFormat: 'YYYY.MM',
-      },
-      validation: (Rule) => Rule.required(),
+      type: 'string',
+      description: '연도와 월만 입력해 주세요. (예: 2026.04)',
+      placeholder: '2026.04',
+      validation: (Rule) =>
+        Rule.required()
+          .regex(/^\d{4}\.(0[1-9]|1[0-2])$/, {
+            name: 'YYYY.MM',
+            invert: false,
+          })
+          .error('2026.04 형식으로 입력해 주세요.'),
     }),
+
     defineField({
       name: 'scale',
       title: '규모',
