@@ -1,25 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { client } from '@/sanity/lib/client';
-import { urlFor } from '@/sanity/lib/image';
-
-type SanityProjectDetail = {
-  _id: string;
-  title: string;
-  region: string;
-  completionDate: string;
-  location: string;
-  scale?: string;
-  occupants?: string;
-  landArea?: string;
-  buildingArea?: string;
-  totalFloorArea?: string;
-  mainImage: any;
-  gallery?: any[];
-};
+import ProjectGallery from '@/components/projects/ProjectGallery';
+import {
+  getProjectDetailData,
+  type SanityProjectDetail,
+} from '@/feature/projects/getProjectDetailData';
 
 const formatDate = (dateString?: string) => {
   if (!dateString) return '';
@@ -28,9 +16,17 @@ const formatDate = (dateString?: string) => {
   return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}`;
 };
 
+/** 숫자만 입력된 면적에는 ㎡를 붙임 */
+const formatArea = (value?: string | number) => {
+  if (value === undefined || value === null || value === '') return '-';
+  const text =
+    typeof value === 'number' ? value.toLocaleString('ko-KR') : String(value);
+  return text.includes('㎡') || text.includes('m') ? text : `${text}㎡`;
+};
+
 const ProjectDetail = () => {
-  const params = useParams();
-  const urlTitle = params?.urlTitle as string;
+  const params = useParams<{ urlTitle: string }>();
+  const urlTitle = params?.urlTitle ? decodeURIComponent(params.urlTitle) : '';
 
   const [project, setProject] = useState<SanityProjectDetail | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,27 +34,9 @@ const ProjectDetail = () => {
   useEffect(() => {
     if (!urlTitle) return;
 
-    const fetchSingleProject = async () => {
+    const fetchProject = async () => {
       try {
-        const query = `*[_type == "project" && urlTitle.current == $urlTitle][0] {
-          _id,
-          title,
-          region,
-          completionDate,
-          location,
-          scale,
-          occupants,
-          landArea,
-          buildingArea,
-          totalFloorArea,
-          mainImage,
-          gallery
-        }`;
-
-        const data = await client.fetch<SanityProjectDetail>(query, {
-          urlTitle,
-        });
-        setProject(data);
+        setProject(await getProjectDetailData(urlTitle));
       } catch (error) {
         console.error('프로젝트 상세 데이터를 불러오지 못했습니다:', error);
       } finally {
@@ -66,124 +44,107 @@ const ProjectDetail = () => {
       }
     };
 
-    fetchSingleProject();
+    fetchProject();
   }, [urlTitle]);
 
-  // 데이터 로딩 중 스켈레톤 UI (animate-pulse 적용)
-  if (loading) {
-    return (
-      <article className="size-full animate-pulse">
-        <div className="mx-auto flex w-full flex-col gap-8 lg:flex-row lg:gap-16">
-          <div className="flex w-full flex-col gap-6 lg:w-105 lg:shrink-0">
-            <div className="order-1 h-8 w-3/4 bg-neutral-200 lg:order-2 lg:h-10" />
-            <div className="order-2 h-4 w-1/2 bg-neutral-200 lg:order-1" />
-            <div className="order-3 flex flex-col gap-3 pt-4">
-              {[...Array(7)].map((_, i) => (
-                <div
-                  key={i}
-                  className="flex items-center justify-between gap-4 pb-3"
-                >
-                  <div className="h-4 w-16 bg-neutral-200" />
-                  <div className="h-4 w-28 bg-neutral-200" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex w-full flex-col gap-2.5 lg:gap-3">
-            <div className="relative aspect-[390/233] w-full bg-neutral-200 lg:aspect-[1075/644]" />
-            <div className="flex flex-col gap-2.5 lg:flex-row lg:gap-3">
-              <div className="relative aspect-[390/233] w-full bg-neutral-200 lg:aspect-[259/196] lg:w-64" />
-              <div className="relative aspect-[390/233] w-full bg-neutral-200 lg:aspect-[259/196] lg:w-64" />
-            </div>
-          </div>
-        </div>
-      </article>
-    );
-  }
+  if (loading) return <ProjectDetailSkeleton />;
 
   if (!project) {
     return (
-      <div className="w-full py-36 text-center text-neutral-400">
+      <div className="w-full py-[clamp(80px,10vw,144px)] text-center text-[clamp(13px,11px_+_0.52vw,18px)] text-neutral-400">
         해당 프로젝트를 찾을 수 없습니다.
       </div>
     );
   }
 
   const specItems = [
-    { label: '준공일', value: formatDate(project.completionDate) },
-    { label: '위치', value: project.location },
+    { label: '준공일', value: formatDate(project.completionDate) || '-' },
+    { label: '위치', value: project.location || '-' },
     { label: '규모', value: project.scale || '-' },
     { label: '거주인원', value: project.occupants || '-' },
-    { label: '대지면적', value: project.landArea || '-' },
-    { label: '건축면적', value: project.buildingArea || '-' },
-    { label: '연면적', value: project.totalFloorArea || '-' },
+    { label: '대지면적', value: formatArea(project.landArea) },
+    { label: '건축면적', value: formatArea(project.buildingArea) },
+    { label: '연면적', value: formatArea(project.totalFloorArea) },
   ];
 
+  // 대표 이미지 + 갤러리를 한 목록으로
+  const images = [project.mainImage, ...(project.gallery ?? [])].filter(
+    Boolean,
+  );
+
   return (
-    <article className="size-full">
-      <div className="mx-auto flex w-full flex-col gap-8 lg:flex-row lg:gap-16">
-        <div className="flex w-full flex-col gap-6 lg:w-105 lg:shrink-0">
-          <h1 className="order-1 text-center text-base font-semibold text-zinc-800 lg:order-2 lg:text-left lg:text-4xl lg:font-medium lg:text-zinc-600">
-            {project.title}
-          </h1>
+    // 모바일: [제목·경로·정보·사진] / 데스크탑: 화면 높이에 맞춰 왼쪽 [경로·제목·정보] + 오른쪽 [사진]
+    // 글자·간격은 화면 폭에 따라 clamp로 부드럽게 변함 (기준: 384px → 1920px)
+    <article className="mx-auto grid w-full max-w-96 grid-cols-1 px-[10%] pb-[clamp(56px,8vw,80px)] lg:min-h-0 lg:max-w-432 lg:flex-1 lg:grid-cols-[minmax(180px,280px)_minmax(0,var(--gal-w))] lg:grid-rows-[auto_auto_minmax(0,1fr)] lg:justify-center lg:gap-x-0 lg:px-[clamp(48px,6vw,120px)] lg:pt-(--pt) lg:pb-(--pb) lg:[--crumb-fs:clamp(12px,10.5px_+_0.39vw,18px)] lg:[--crumb-mb:clamp(24px,2.8vw,54px)] lg:[--gal-w:min(960px,calc((100dvh_-_var(--header-h)_-_var(--pt)_-_var(--pb)_-_var(--crumb-fs)_*_1.5_-_var(--crumb-mb))_*_1075_/_854))] lg:[--pb:clamp(32px,6vh,80px)] lg:[--pt:clamp(8px,2vh,32px)]">
+      {/* 제목: 16px → 40px (section-title) */}
+      <h1 className="section-title lg:col-start-1 lg:row-start-2 lg:text-left lg:font-medium">
+        {project.title}
+      </h1>
 
-          <nav className="order-2 flex items-center justify-center gap-4 text-xs text-zinc-400 lg:order-1 lg:justify-start lg:text-lg">
-            <span className="hover:text-zinc-600">프로젝트</span>
-            <span>{project.region}</span>
-            <span>{project.title}</span>
-          </nav>
+      {/* 경로: 12px → 18px */}
+      <nav
+        aria-label="현재 위치"
+        className="mt-[clamp(24px,8vw,40px)] lg:col-start-1 lg:row-start-1 lg:mt-0 lg:mb-(--crumb-mb)"
+      >
+        <ol className="flex flex-wrap justify-center gap-x-[1.3em] text-[clamp(12px,10.5px_+_0.39vw,18px)] leading-normal text-zinc-400 lg:justify-start">
+          <li>
+            <Link href="/projects" className="hover:text-zinc-600">
+              프로젝트
+            </Link>
+          </li>
+          {project.region && <li>{project.region}</li>}
+          <li aria-current="page">{project.title}</li>
+        </ol>
+      </nav>
 
-          <dl className="order-3 flex flex-col gap-3">
-            {specItems.map((item) => (
-              <div
-                key={item.label}
-                className="flex items-center justify-between gap-4 border-b border-gray-100 pb-3 last:border-none"
-              >
-                <dt className="text-[9px] text-neutral-400 lg:text-sm">
-                  {item.label}
-                </dt>
-                <dd className="text-[9px] text-neutral-500 lg:text-sm">
-                  {item.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-
-        <div className="flex w-full flex-col gap-2.5 lg:gap-3">
-          <div className="relative aspect-[390/233] w-full overflow-hidden lg:aspect-[1075/644]">
-            {project.mainImage ? (
-              <img
-                src={urlFor(project.mainImage).width(1200).url()}
-                alt={project.title}
-                className="absolute inset-0 size-full object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 size-full bg-neutral-200" />
-            )}
+      {/* 정보: 9px → 18px, 줄 간격·칸 너비도 글자 크기(em)에 맞춰 변함 */}
+      <dl className="mt-[clamp(28px,9vw,44px)] flex flex-col gap-[1.1em] text-[clamp(9px,6.75px_+_0.586vw,18px)] lg:col-start-1 lg:row-start-3 lg:mt-[clamp(32px,3.35vw,64px)] lg:min-h-0 lg:overflow-y-auto">
+        {specItems.map(({ label, value }) => (
+          <div key={label} className="flex items-center gap-[1em]">
+            <dt className="w-[4.5em] shrink-0 text-neutral-400">{label}</dt>
+            <span aria-hidden className="h-[0.8em] w-px shrink-0 bg-gray-200" />
+            <dd className="min-w-0 text-neutral-500">{value}</dd>
           </div>
+        ))}
+      </dl>
 
-          {project.gallery && project.gallery.length > 0 && (
-            <div className="flex flex-col gap-2.5 lg:flex-row lg:gap-3">
-              {project.gallery.map((imgObj, index) => (
-                <div
-                  key={index}
-                  className="relative aspect-[390/233] w-full overflow-hidden lg:aspect-[259/196] lg:w-64"
-                >
-                  <img
-                    src={urlFor(imgObj).width(500).url()}
-                    alt={`${project.title} 갤러리 이미지 ${index + 1}`}
-                    className="absolute inset-0 size-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
+      {images.length > 0 && (
+        <div className="mt-[clamp(24px,8vw,32px)] lg:col-start-2 lg:row-span-2 lg:row-start-2 lg:mt-0 lg:min-h-0">
+          <ProjectGallery images={images} title={project.title} />
         </div>
-      </div>
+      )}
     </article>
   );
 };
+
+/** 로딩 중 스켈레톤 (실제 레이아웃과 같은 배치·간격) */
+const ProjectDetailSkeleton = () => (
+  <article
+    aria-busy
+    className="mx-auto grid w-full max-w-96 animate-pulse grid-cols-1 px-[10%] pb-[clamp(56px,8vw,80px)] lg:min-h-0 lg:max-w-432 lg:flex-1 lg:grid-cols-[minmax(180px,280px)_minmax(0,var(--gal-w))] lg:grid-rows-[auto_auto_minmax(0,1fr)] lg:justify-center lg:gap-x-0 lg:px-[clamp(48px,6vw,120px)] lg:pt-(--pt) lg:pb-(--pb) lg:[--crumb-fs:clamp(12px,10.5px_+_0.39vw,18px)] lg:[--crumb-mb:clamp(24px,2.8vw,54px)] lg:[--gal-w:min(960px,calc((100dvh_-_var(--header-h)_-_var(--pt)_-_var(--pb)_-_var(--crumb-fs)_*_1.5_-_var(--crumb-mb))_*_1075_/_854))] lg:[--pb:clamp(32px,6vh,80px)] lg:[--pt:clamp(8px,2vh,32px)]"
+  >
+    <div className="mx-auto h-[clamp(20px,2.5vw,40px)] w-1/2 bg-neutral-200 lg:col-start-1 lg:row-start-2 lg:mx-0 lg:w-3/4" />
+    <div className="mx-auto mt-[clamp(24px,8vw,40px)] h-[clamp(12px,1vw,20px)] w-2/5 bg-neutral-200 lg:col-start-1 lg:row-start-1 lg:mx-0 lg:mt-0 lg:mb-(--crumb-mb) lg:h-[calc(var(--crumb-fs)*1.5)] lg:w-1/2" />
+    <div className="mt-[clamp(28px,9vw,44px)] flex flex-col gap-[clamp(10px,1vw,20px)] lg:col-start-1 lg:row-start-3 lg:mt-[clamp(32px,3.35vw,64px)]">
+      {[...Array(7)].map((_, i) => (
+        <div
+          key={i}
+          className="h-[clamp(10px,0.95vw,18px)] w-3/5 bg-neutral-200"
+        />
+      ))}
+    </div>
+    <div className="mt-[clamp(24px,8vw,32px)] lg:col-start-2 lg:row-span-2 lg:row-start-2 lg:mt-0 lg:flex lg:min-h-0 lg:flex-col lg:gap-[clamp(8px,0.75vw,14px)]">
+      <div className="aspect-[390/233] w-full bg-neutral-200 lg:aspect-auto lg:min-h-0 lg:flex-1" />
+      <div className="hidden gap-[clamp(8px,0.65vw,12px)] lg:flex">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="aspect-[259/196] h-[clamp(56px,9vh,110px)] bg-neutral-200"
+          />
+        ))}
+      </div>
+    </div>
+  </article>
+);
 
 export default ProjectDetail;

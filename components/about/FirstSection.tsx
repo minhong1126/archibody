@@ -2,7 +2,7 @@ import { IoIosArrowRoundForward } from 'react-icons/io';
 
 const FirstSection = () => {
   return (
-    <section className="flex w-full flex-col items-center justify-center gap-[clamp(1.5rem,5vw,4rem)] px-[calc(42/390*100%)] py-[5%] lg:size-full">
+    <section className="flex w-full flex-col items-center justify-center gap-[clamp(1.5rem,5vw,4rem)] px-[calc(42/390*100%)] py-[5%] pt-20 lg:size-full lg:pt-24">
       <h2 className="section-title">몸</h2>
 
       <div className="@container flex w-full max-w-160 items-center justify-center">

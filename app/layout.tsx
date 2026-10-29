@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="font-pretendard min-h-screen w-full bg-white">
+      <body className="font-pretendard size-full min-h-screen bg-white">
         <Header />
         <main className="min-h-0 w-full flex-1 overscroll-y-contain scroll-smooth lg:h-screen lg:snap-y lg:snap-mandatory lg:overflow-hidden lg:overflow-y-scroll">
           {children}

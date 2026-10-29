@@ -1,9 +1,9 @@
 import Footer from '@/components/common/Footer';
 import ProjectDetail from '@/components/projects/ProjectsDetail';
 
-const ProjectDetailPage = () => {
+const Page = () => {
   return (
-    <div className="pt-20 lg:size-full lg:pt-24">
+    <div className="pt-(--header-h) lg:flex lg:h-full lg:flex-col">
       <ProjectDetail />
       <div className="lg:hidden">
         <Footer />
@@ -12,4 +12,4 @@ const ProjectDetailPage = () => {
   );
 };
 
-export default ProjectDetailPage;
+export default Page;

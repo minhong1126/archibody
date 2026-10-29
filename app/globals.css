@@ -1,5 +1,15 @@
 @import 'tailwindcss';
 
+:root {
+  --header-h: 80px;
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --header-h: 96px;
+  }
+}
+
 @theme {
   --font-pretendard: 'Pretendard', sans-serif;
 

@@ -14,7 +14,28 @@ const MENU_LINKS = [
 const MainHeader = () => {
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const headerRef = useRef<HTMLElement>(null);
 
+  // 헤더 실제 높이를 --header-h CSS 변수로 공유 (화면 크기에 따라 바뀌어도 자동 반영)
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    const updateHeaderHeight = () => {
+      document.documentElement.style.setProperty(
+        '--header-h',
+        `${el.offsetHeight}px`,
+      );
+    };
+
+    updateHeaderHeight();
+    const observer = new ResizeObserver(updateHeaderHeight);
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  // 스크롤 방향에 따라 헤더 숨김/표시
   useEffect(() => {
     const mainEl = document.querySelector('main');
 
@@ -49,7 +70,10 @@ const MainHeader = () => {
 
   return (
     <header
-      className={`text-header-text fixed z-50 flex w-full bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'translate-y-0' : '-translate-y-full'} `}
+      ref={headerRef}
+      className={`text-header-text fixed z-50 flex w-full bg-white transition-transform duration-300 ease-in-out ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      }`}
     >
       <div className="hidden w-full min-[1024px]:flex">
         <DesktopHeader menuItems={MENU_LINKS} />
