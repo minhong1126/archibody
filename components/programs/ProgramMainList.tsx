@@ -9,9 +9,9 @@ const ProgramMainList = () => {
   const programDescList = getProgramDescList();
 
   return (
-    <section className="w-full px-[10%] py-20 lg:pt-24">
+    <section className="w-full px-[10%]">
       <h2 className="section-title">건축주 참여 프로그램</h2>
-      <ul className="mt-18 flex flex-col gap-5 lg:mt-20 lg:gap-17.5">
+      <ul className="mt-10 flex flex-col gap-5 lg:mt-20 lg:gap-17.5">
         {programDescList.map((program) => (
           <li key={program.index}>
             <Link
@@ -19,7 +19,6 @@ const ProgramMainList = () => {
               aria-label={`${program.title} 자세히 보기`}
               className={[
                 'group relative block break-keep transition',
-                // 'focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-stone-400',
                 'rounded-[10px] bg-zinc-400/10 px-5 py-6 active:bg-zinc-400/20',
                 'lg:flex lg:rounded-[40px] lg:bg-transparent lg:active:bg-transparent',
                 'lg:px-12 lg:py-12',

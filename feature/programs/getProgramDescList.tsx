@@ -3,7 +3,7 @@ const getProgramDescList = () => {
     {
       index: '01',
       title: ['몸건축 워크샵', '원주 오픈하우스'],
-      href: '',
+      href: '/programs/workshop',
       accent: 'from-red-600/5',
       rows: [
         { label: '대상', value: '예비 건축주 또는 건축에 관심 있는 누구나' },
@@ -34,7 +34,7 @@ const getProgramDescList = () => {
     {
       index: '02',
       title: ['신규 프로젝트', '오픈하우스'],
-      href: '/program/newProject',
+      href: '/programs/openhouse',
       accent: 'from-violet-700/5',
       rows: [
         {
@@ -62,7 +62,7 @@ const getProgramDescList = () => {
     {
       index: '03',
       title: ['찾아가는', ' 건축상담'],
-      href: '/program/consulting',
+      href: '/programs/consulting',
       accent: 'from-sky-500/5',
       rows: [
         {

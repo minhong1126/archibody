@@ -1,20 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { Suspense, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { client } from '@/sanity/lib/client';
+import {
+  getProjectMainList,
+  type SanityProject,
+} from '@/feature/projects/getProjectMainList';
 import { urlFor } from '@/sanity/lib/image';
-
-type SanityProject = {
-  _id: string;
-  title: string;
-  urlTitle: string;
-  region: string;
-  location: string;
-  completionDate: string;
-  thumbnail: any;
-};
 
 const formatDate = (dateString?: string) => {
   if (!dateString) return '';
@@ -35,18 +27,7 @@ const ProjectContent = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const query = `*[_type == "project"] | order(completionDate desc) {
-          _id,
-          title,
-          "urlTitle": urlTitle.current,
-          region,
-          location,
-          completionDate,
-          thumbnail
-        }`;
-
-        const data = await client.fetch<SanityProject[]>(query);
-        setProjects(data || []);
+        setProjects(await getProjectMainList());
       } catch (error) {
         console.error('Sanity 데이터를 가져오는데 실패했습니다:', error);
       } finally {
@@ -88,6 +69,8 @@ const ProjectContent = () => {
     (safePage - 1) * PAGE_SIZE,
     safePage * PAGE_SIZE,
   );
+  // 항상 8칸 자리를 차지하도록 부족한 만큼 빈 칸 추가
+  const emptySlots = PAGE_SIZE - paginated.length;
 
   const handleRegionChange = (region: string) => {
     setActiveRegion(region);
@@ -113,7 +96,8 @@ const ProjectContent = () => {
           </button>
         ))}
       </div>
-      <div className="grid w-full grid-cols-2 gap-x-[clamp(0.75rem,2vw,1.75rem)] gap-y-[clamp(1.5rem,4vw,3.5rem)] sm:grid-cols-3 lg:grid-cols-4">
+
+      <div className="relative grid w-full grid-cols-2 gap-x-[clamp(0.75rem,2vw,1.75rem)] gap-y-[clamp(1.5rem,4vw,3.5rem)] sm:grid-cols-3 lg:grid-cols-4">
         {paginated.map((project) => (
           <div key={project._id} className="group flex flex-col items-start">
             <Link
@@ -149,21 +133,41 @@ const ProjectContent = () => {
             </Link>
           </div>
         ))}
+
+        {/* 빈 칸: 보이지 않지만 카드와 같은 크기로 자리 차지 */}
+        {Array.from({ length: emptySlots }, (_, i) => (
+          <div
+            key={`empty-${i}`}
+            aria-hidden
+            className="invisible aspect-square w-full lg:aspect-[353/419]"
+          />
+        ))}
+
+        {/* 프로젝트가 하나도 없을 때 안내 (자리를 차지하지 않고 위에 겹침) */}
+        {paginated.length === 0 && (
+          <p className="absolute inset-0 flex items-center justify-center text-[clamp(0.75rem,1.2vw,1rem)] text-neutral-400">
+            등록된 프로젝트가 없습니다.
+          </p>
+        )}
       </div>
 
-      {totalPages > 1 && (
-        <div className="flex w-full items-center justify-center gap-[clamp(0.5rem,1vw,0.75rem)]">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-            <button
-              key={page}
-              onClick={() => setActivePage(page)}
-              className={`text-[clamp(0.625rem,1vw,1rem)] ${safePage === page ? 'font-bold text-zinc-600' : 'font-normal text-neutral-500'}`}
-            >
-              {page}
-            </button>
-          ))}
-        </div>
-      )}
+      {/* 페이지 번호 영역도 항상 높이를 차지 (페이지가 1개면 숨김 처리만) */}
+      <div
+        className={`flex w-full items-center justify-center gap-[clamp(0.5rem,1vw,0.75rem)] ${
+          totalPages > 1 ? '' : 'invisible'
+        }`}
+      >
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => setActivePage(page)}
+            tabIndex={totalPages > 1 ? 0 : -1}
+            className={`text-[clamp(0.625rem,1vw,1rem)] ${safePage === page ? 'font-bold text-zinc-600' : 'font-normal text-neutral-500'}`}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
     </>
   );
 };
@@ -172,7 +176,7 @@ const ProjectSkeletonGrid = () => (
   <div className="flex w-full animate-pulse flex-col gap-6">
     <div className="h-6 w-full max-w-md rounded bg-neutral-200" />
     <div className="grid w-full grid-cols-2 gap-x-[clamp(0.75rem,2vw,1.75rem)] gap-y-[clamp(1.5rem,4vw,3.5rem)] sm:grid-cols-3 lg:grid-cols-4">
-      {Array.from({ length: 4 }).map((_, i) => (
+      {Array.from({ length: PAGE_SIZE }).map((_, i) => (
         <div key={i} className="flex flex-col gap-2">
           <div className="aspect-square w-full rounded bg-neutral-200 lg:aspect-[353/419]" />
           <div className="h-4 w-2/3 rounded bg-neutral-200" />
@@ -186,7 +190,7 @@ const ProjectSkeletonGrid = () => (
 const ProjectSection = () => {
   return (
     <section className="flex w-full flex-col items-start gap-[clamp(1.5rem,1.5vw,2.5rem)] px-[clamp(1.25rem,5vw,3rem)] py-[clamp(2.5rem,6vw,4rem)]">
-      <h2 className="text-font-title text-[clamp(1.5rem,3vw,2.25rem)] font-semibold">
+      <h2 className="section-title text-[clamp(1.5rem,3vw,2.25rem)] font-semibold">
         프로젝트
       </h2>
 

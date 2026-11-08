@@ -14,7 +14,7 @@
   --font-pretendard: 'Pretendard', sans-serif;
 
   /* 섹션 간 간격 */
-  --spacing-between-sections: clamp(3.5rem, 16vw, 10rem);
+  --spacing-between-sections: clamp(3.5rem, 14vw, 10rem);
 
   /* header */
   --color-header-text: #878787;

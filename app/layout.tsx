@@ -1,6 +1,5 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import Header from '@/components/common/header/Header';
 
 export const metadata: Metadata = {
   title: '건축사사무소 몸',
@@ -9,16 +8,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ko">
       <body className="font-pretendard size-full min-h-screen bg-white">
-        <Header />
-        <main className="min-h-0 w-full flex-1 overscroll-y-contain scroll-smooth lg:h-screen lg:snap-y lg:snap-mandatory lg:overflow-hidden lg:overflow-y-scroll">
-          {children}
-        </main>
+        {children}
       </body>
     </html>
   );
