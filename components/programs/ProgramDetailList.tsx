@@ -4,33 +4,31 @@
 import {
   type ReactNode,
   useEffect,
+  useMemo,
   useState,
   useSyncExternalStore,
 } from 'react';
 import Link from 'next/link';
-// import { getOpenHouseList } from '@/feature/programs/openHouse/getOpenHouseData';
-import { getWorkshopList } from '@/feature/programs/getWorkshopData';
+import { getOpenhouseMainList } from '@/feature/programs/getOpenhouseMainList';
+import { getWorkshopMainList } from '@/feature/programs/getWorkshopMainList';
 import { urlFor } from '@/sanity/lib/image';
 
-// TODO: 오픈하우스 작업 시 'openHouse' 추가
-export type ProgramKind = 'workshop'; // | 'openHouse';
+export type ProgramKind = 'workshop' | 'openHouse';
 
 type Card = {
   _id: string;
   title: string;
   urlTitle: string;
+  /** 정렬·연도 탭 기준 날짜 (YYYY-MM-DD) */
   date: string;
+  /** 카드에 보여줄 기간 (오픈하우스: 2025.10.19-10.20) — 없으면 date 사용 */
+  dateRange?: string;
   subtitle?: string;
   thumbnail: any;
 };
 
-type ListResult = { items: Card[]; total: number; dates: string[] };
-
-type FetchList = (params: {
-  year: string;
-  page: number;
-  pageSize: number;
-}) => Promise<ListResult>;
+/** 전체 목록 조회 함수 (연도 필터·페이지 나누기는 화면에서 처리) */
+type FetchList = () => Promise<Card[]>;
 
 /** 프로그램별 설정: 제목 · 카드 라벨 · 상세 주소 · 데이터 조회 함수 */
 const PROGRAM_CONFIG: Record<
@@ -46,15 +44,14 @@ const PROGRAM_CONFIG: Record<
     title: ['몸건축 워크샵', '원주 오픈하우스'],
     label: '워크샵',
     basePath: '/programs/workshop',
-    fetchList: getWorkshopList,
+    fetchList: getWorkshopMainList,
   },
-  // TODO: 오픈하우스 작업 시 주석 해제
-  // openHouse: {
-  //   title: ['신규 프로젝트', '오픈하우스'],
-  //   label: '오픈하우스',
-  //   basePath: '/programs/newProject',
-  //   fetchList: getOpenHouseList,
-  // },
+  openHouse: {
+    title: ['신규 프로젝트', '오픈하우스'],
+    label: '오픈하우스',
+    basePath: '/programs/openhouse',
+    fetchList: getOpenhouseMainList,
+  },
 };
 
 /** 한 페이지 개수: 모바일(1열) 최대 4개 · 그 외 8개 */
@@ -104,14 +101,9 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
 
   const [year, setYear] = useState('');
   const [page, setPage] = useState(1);
-  const [data, setData] = useState<ListResult>({
-    items: [],
-    total: 0,
-    dates: [],
-  });
+  /** 전체 목록 (최신순) */
+  const [posts, setPosts] = useState<Card[]>([]);
   const [loading, setLoading] = useState(true);
-  /** 첫 응답을 받았는지 (연도 탭 스켈레톤 표시용) */
-  const [initialized, setInitialized] = useState(false);
 
   /** 화면 폭에 따른 한 페이지 개수 */
   const pageSize = useIsMobile() ? PAGE_SIZE_MOBILE : PAGE_SIZE;
@@ -123,25 +115,19 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
     setPage(1);
   }
 
+  // 전체 목록은 처음 한 번만 불러옴 (연도·페이지·화면 폭이 바뀌어도 다시 요청하지 않음)
   useEffect(() => {
-    let ignore = false; // 연도/페이지를 빠르게 바꿀 때 이전 응답이 덮어쓰지 않도록
+    let ignore = false;
 
     const fetchList = async () => {
       setLoading(true);
       try {
-        const result = await config.fetchList({
-          year,
-          page,
-          pageSize,
-        });
-        if (!ignore) setData(result);
+        const result = await config.fetchList();
+        if (!ignore) setPosts(result ?? []);
       } catch (error) {
         console.error('프로그램 목록을 불러오지 못했습니다:', error);
       } finally {
-        if (!ignore) {
-          setLoading(false);
-          setInitialized(true);
-        }
+        if (!ignore) setLoading(false);
       }
     };
 
@@ -149,14 +135,32 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
     return () => {
       ignore = true;
     };
-  }, [config, year, page, pageSize]);
+  }, [config]);
 
-  const years = [...new Set(data.dates.map((d) => d.slice(0, 4)))].sort(
-    (a, b) => b.localeCompare(a),
+  /** 연도 탭: 게시물 날짜의 연도 (최신순) */
+  const years = useMemo(
+    () =>
+      [...new Set(posts.map((p) => p.date?.slice(0, 4)).filter(Boolean))].sort(
+        (a, b) => b.localeCompare(a),
+      ),
+    [posts],
   );
-  const totalPages = Math.max(1, Math.ceil(data.total / pageSize));
+
+  /** 선택한 연도의 게시물 */
+  const filtered = useMemo(
+    () => (year ? posts.filter((p) => p.date?.startsWith(year)) : posts),
+    [posts, year],
+  );
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  /** 현재 페이지에 보여줄 게시물 */
+  const items = filtered.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
   // 항상 한 페이지 개수(모바일 4 · 그 외 8)만큼 자리를 차지하도록 빈 칸 추가
-  const emptySlots = Math.max(0, pageSize - data.items.length);
+  const emptySlots = Math.max(0, pageSize - items.length);
 
   const handleYearChange = (y: string) => {
     setYear(y);
@@ -172,7 +176,7 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
       </h1>
 
       {/* 연도 필터 */}
-      {!initialized ? (
+      {loading ? (
         // 첫 로딩: 실제 탭과 같은 글자 높이의 회색 막대
         <div aria-busy className={`${TABS_CLASS} ${TAB_TEXT} animate-pulse`}>
           {Array.from({ length: 6 }, (_, i) => (
@@ -207,7 +211,7 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
         <PostGridSkeleton />
       ) : (
         <ul className={GRID_CLASS}>
-          {data.items.map((post) => (
+          {items.map((post) => (
             <li key={post._id}>
               <PostCard
                 post={post}
@@ -225,7 +229,7 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
           ))}
 
           {/* 게시물이 하나도 없을 때 안내 (자리를 차지하지 않고 위에 겹침) */}
-          {data.items.length === 0 && (
+          {items.length === 0 && (
             <li className="absolute inset-0 flex items-center justify-center text-[clamp(0.75rem,1.2vw,1rem)] text-neutral-400">
               등록된 게시물이 없습니다.
             </li>
@@ -234,7 +238,11 @@ const ProgramDetailList = ({ program }: { program: ProgramKind }) => {
       )}
 
       {/* 페이지네이션: 목록이 없어도 항상 표시 */}
-      <Pagination page={page} totalPages={totalPages} onChange={setPage} />
+      <Pagination
+        page={currentPage}
+        totalPages={totalPages}
+        onChange={setPage}
+      />
     </section>
   );
 };
@@ -294,8 +302,11 @@ const PostCard = ({
   label: string;
   href: string;
 }) => {
-  const { title, date, subtitle, thumbnail } = post;
-  const meta = [formatDate(date), subtitle].filter(Boolean).join(' ');
+  const { title, date, dateRange, subtitle, thumbnail } = post;
+  // 오픈하우스는 회차 기간(2025.10.19-10.20), 워크샵은 날짜(2026.06.13)
+  const meta = [dateRange || formatDate(date), subtitle]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <Link href={href} className="group flex flex-col">

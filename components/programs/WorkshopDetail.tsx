@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { PortableText, type PortableTextComponents } from 'next-sanity';
 import {
-  getWorkshopDetail,
+  getWorkshopDetailData,
   type WorkshopDetail as WorkshopDetailData,
-} from '@/feature/programs/getWorkshopData';
+} from '@/feature/programs/getWorkshopDetailData';
 import { urlFor } from '@/sanity/lib/image';
 
 /** 2026-06-13 → 2026.06.13 */
@@ -157,7 +157,7 @@ const WorkshopDetail = () => {
 
     const fetchPost = async () => {
       try {
-        setPost(await getWorkshopDetail(urlTitle));
+        setPost(await getWorkshopDetailData(urlTitle));
       } catch (error) {
         console.error('워크샵 상세 데이터를 불러오지 못했습니다:', error);
       } finally {
