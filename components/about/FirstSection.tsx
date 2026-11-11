@@ -3,13 +3,13 @@ import { IoIosArrowRoundForward } from 'react-icons/io';
 const FirstSection = () => {
   return (
     <section className="flex w-full flex-col items-center justify-center gap-[clamp(1.5rem,5vw,4rem)] px-[calc(42/390*100%)] py-[5%]">
-      <h2 className="section-title">몸</h2>
+      <h2 className="section-title">건축사사무소 몸</h2>
 
       <div className="@container flex w-full max-w-160 items-center justify-center">
         <div className="relative aspect-square w-full max-w-2xs min-w-18 flex-1 rounded-full bg-linear-to-b from-[#666666]/5 to-white/5 shadow-[0px_16px_28.5px_0px_rgba(0,0,0,0.05),inset_-5px_1px_19px_0px_rgba(255,255,255,1.00)]">
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5">
             <span className="text-center text-[clamp(0.8rem,5cqw,2rem)] font-semibold text-[#5C5C5C]">
-              건강한 삶
+              건강한 집
             </span>
             <span className="text-[clamp(0.65rem,3.5cqw,1.5rem)] font-medium text-[#BDBDBD]">
               Software
@@ -29,7 +29,7 @@ const FirstSection = () => {
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 px-2">
             <span className="text-center text-[clamp(0.8rem,5cqw,2rem)] font-semibold text-[#5C5C5C]">
-              건강한 몸
+              건강한 삶
             </span>
             <span className="text-[clamp(0.65rem,3.5cqw,1.5rem)] font-medium text-[#BDBDBD]">
               Hardware

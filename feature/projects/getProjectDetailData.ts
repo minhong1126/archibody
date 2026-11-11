@@ -8,18 +8,18 @@ export type SanityProjectDetail = {
   location: string;
   scale?: string;
   occupants?: string;
-  landArea?: string | number;
+  siteArea?: string | number;
   buildingArea?: string | number;
   totalFloorArea?: string | number;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  mainImage: any;
+  thumbnail: any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   gallery?: any[];
 };
 
 const PROJECT_DETAIL_QUERY = `*[_type == "project" && urlTitle.current == $urlTitle][0] {
   _id, title, region, completionDate, location, scale, occupants,
-  landArea, buildingArea, totalFloorArea, mainImage, gallery
+  siteArea, buildingArea, totalFloorArea, thumbnail, gallery
 }`;
 
 export const getProjectDetailData = (urlTitle: string) =>

@@ -24,11 +24,11 @@ const CONTACT_GROUPS: ContactGroup[] = [
 
 const Contact = () => {
   return (
-    <section className="w-full px-[10%] py-20 lg:pt-24">
-      <div className="mx-auto grid max-w-sm grid-cols-1 lg:max-w-265 lg:grid-cols-[minmax(0,606fr)_minmax(0,384fr)] lg:grid-rows-[auto_1fr] lg:gap-x-10 xl:gap-x-[70px]">
+    <section className="w-full px-[10%] py-[5%]">
+      <div className="mx-auto grid max-w-sm grid-cols-1 lg:max-w-265 lg:grid-cols-[minmax(0,606fr)_minmax(0,384fr)] lg:grid-rows-[auto_1fr] lg:gap-x-10">
         <h2 className="section-title lg:text-left">건축사사무소 몸</h2>
 
-        <div className="mt-15 aspect-[326/189] w-full overflow-hidden bg-zinc-100 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:mt-0 lg:aspect-[606/449]">
+        <div className="mt-15 aspect-[326/189] w-full overflow-hidden bg-zinc-100 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:mt-0">
           지도지도
         </div>
 

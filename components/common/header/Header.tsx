@@ -71,7 +71,7 @@ const MainHeader = () => {
   return (
     <header
       ref={headerRef}
-      className={`text-header-text fixed z-50 flex w-full bg-white transition-transform duration-300 ease-in-out ${
+      className={`text-header-text fixed z-100 flex w-full bg-white transition-transform duration-300 ease-in-out ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >

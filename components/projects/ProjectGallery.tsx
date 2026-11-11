@@ -217,63 +217,61 @@ const ProjectGallery = ({ images, title }: Props) => {
       </dialog>
 
       {/*
-        데스크탑: 시안(1075 × 854) 비율 그대로
-        - 큰 사진 1075 × 644, 썸네일 259 × 196 4장, 간격 14 / 12
-        - 갤러리 너비(--gw)는 [영역 너비]와 [영역 높이 × 1075/854] 중 작은 값 → 화면 안에 항상 꽉 맞게
+        데스크탑: 주어진 영역(가로 · 세로)을 꽉 채움
+        - 큰 사진: 남는 높이를 모두 차지, 비율이 달라지면 가장자리를 잘라서 채움 (object-cover)
+        - 썸네일: 한 줄, 높이는 화면 높이에 비례, 넘치면 가로 스크롤
       */}
       <div
-        className="[container-type:size] hidden size-full lg:block"
+        className="hidden size-full flex-col gap-[clamp(8px,0.75vw,14px)] lg:flex"
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
         onFocus={() => setPaused(true)}
         onBlur={() => setPaused(false)}
       >
-        <div className="flex w-(--gw) flex-col gap-[calc(var(--gw)*14/1075)] [--gw:min(100cqw,calc(100cqh*1075/854))]">
-          <div className="relative aspect-[1075/644] w-full overflow-hidden bg-neutral-100">
-            {images.map((image, i) => (
-              <img
-                key={i}
-                src={urlFor(image).width(1600).auto('format').url()}
-                alt={i === selected ? altOf(i) : ''}
-                aria-hidden={i !== selected}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                className={`absolute inset-0 size-full object-cover transition-opacity duration-700 ${
-                  i === selected ? 'opacity-100' : 'opacity-0'
-                }`}
-              />
-            ))}
-          </div>
-
-          {images.length > 1 && (
-            <ul
-              ref={listRef}
-              className="relative flex gap-[calc(var(--gw)*12/1075)] overflow-x-auto"
-            >
-              {images.map((image, i) => (
-                <li key={i} className="w-[calc(var(--gw)*259/1075)] shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => setSelected(i)}
-                    aria-label={`${i + 1}번째 사진 크게 보기`}
-                    aria-pressed={i === selected}
-                    className={`relative block aspect-[259/196] w-full overflow-hidden bg-neutral-100 transition-opacity focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-stone-400 ${
-                      i === selected
-                        ? 'opacity-100'
-                        : 'opacity-50 hover:opacity-100'
-                    }`}
-                  >
-                    <img
-                      src={urlFor(image).width(400).auto('format').url()}
-                      alt=""
-                      loading="lazy"
-                      className="absolute inset-0 size-full object-cover"
-                    />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="relative min-h-0 flex-1 overflow-hidden bg-neutral-100">
+          {images.map((image, i) => (
+            <img
+              key={i}
+              src={urlFor(image).width(1600).auto('format').url()}
+              alt={i === selected ? altOf(i) : ''}
+              aria-hidden={i !== selected}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              className={`absolute inset-0 size-full object-cover transition-opacity duration-700 ${
+                i === selected ? 'opacity-100' : 'opacity-0'
+              }`}
+            />
+          ))}
         </div>
+
+        {images.length > 1 && (
+          <ul
+            ref={listRef}
+            className="relative flex shrink-0 [scrollbar-width:none] gap-[clamp(8px,0.65vw,12px)] overflow-x-auto [&::-webkit-scrollbar]:hidden"
+          >
+            {images.map((image, i) => (
+              <li key={i} className="shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setSelected(i)}
+                  aria-label={`${i + 1}번째 사진 크게 보기`}
+                  aria-pressed={i === selected}
+                  className={`relative block aspect-[259/196] h-[clamp(56px,13vh,140px)] overflow-hidden bg-neutral-100 transition-opacity focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-stone-400 ${
+                    i === selected
+                      ? 'opacity-100'
+                      : 'opacity-50 hover:opacity-100'
+                  }`}
+                >
+                  <img
+                    src={urlFor(image).width(400).auto('format').url()}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 size-full object-cover"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </>
   );
