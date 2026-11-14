@@ -1,3 +1,5 @@
+import { NaverMap } from './Map';
+
 type ContactItem = { key: string; value: string; href?: string };
 type ContactGroup = { title: string; items: ContactItem[] };
 
@@ -29,7 +31,7 @@ const Contact = () => {
         <h2 className="section-title lg:text-left">건축사사무소 몸</h2>
 
         <div className="mt-15 aspect-[326/189] w-full overflow-hidden bg-zinc-100 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:mt-0">
-          지도지도
+          <NaverMap lat={37.312674} lng={127.987631} className="size-full" />
         </div>
 
         <div className="mt-9 flex flex-col gap-8 lg:col-start-2 lg:row-start-2 lg:mt-12 lg:gap-10">
